@@ -25,6 +25,18 @@ export default function Home() {
   const [results, setResults] = useState<ScrapeResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [connectionStatus, setConnectionStatus] = useState<{ success: boolean; message: string } | null>(null);
+
+  const testConnection = async () => {
+    setConnectionStatus(null);
+    try {
+      const res = await fetch('/api/test-connection');
+      const data = await res.json();
+      setConnectionStatus(data);
+    } catch (e) {
+      setConnectionStatus({ success: false, message: 'Failed to reach API' });
+    }
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,6 +122,24 @@ export default function Home() {
             Automated local browser control for business data extraction.
           </p>
         </div>
+
+        {/* Connection Status */}
+        <div className="flex justify-center">
+          <button
+            onClick={testConnection}
+            className="text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+          >
+            Test Chrome Connection
+          </button>
+        </div>
+        {connectionStatus && (
+          <div className={cn(
+            "text-center p-3 rounded-lg max-w-md mx-auto",
+            connectionStatus.success ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
+          )}>
+            {connectionStatus.message}
+          </div>
+        )}
 
         {/* Search Form */}
         <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-8 shadow-xl backdrop-blur-sm">

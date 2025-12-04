@@ -135,3 +135,16 @@ export async function* scrapeGoogleMaps(location: string, criteria: string, limi
         }
     }
 }
+
+export async function testConnection() {
+    try {
+        const browser = await puppeteer.connect({
+            browserURL: 'http://127.0.0.1:9222',
+        });
+        const version = await browser.version();
+        browser.disconnect();
+        return { success: true, message: `Connected to ${version}` };
+    } catch (error) {
+        return { success: false, message: 'Could not connect to Chrome. Make sure it is running with --remote-debugging-port=9222' };
+    }
+}
