@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code local settings: saved "Don't ask again" rules can contain keys and passwords
+**/.claude/settings.local.json
+CLAUDE.local.md
